@@ -1,3 +1,6 @@
+# Remember! This program will only stop when you hit CTRL-C
+# It is designed to remain running indefinitely.
+
 class User
 
 	attr_accessor :un, :pw, :name
@@ -72,7 +75,6 @@ def sign_in
 			if @user.pw == pw
 				system("clear")
 				session_menu
-				# attemps -= 3
 			else
 				puts "Password doesn't match."
 			end
@@ -168,7 +170,7 @@ end
 
 def view_account
 	puts "#{@user.name}'s '#{@current_acct.nickname}' account"
-	puts "...with a balance of $#{@current_acct.balance}"
+	puts "...with a balance of $#{'%.2f'%(@current_acct.balance)}"
 	puts "---------------------------"
 	puts "Choose from the following:"
 	puts "1. Deposit"
@@ -205,10 +207,28 @@ end
 def withdrawal
 	print "How much would you like withdraw today: $"
 	amount = gets.chomp.to_f
-	# overdraft check?
-	@current_acct.balance -= amount
-	system("clear")
-	view_account
+	if !overdraft_check(amount)
+		@current_acct.balance -= amount
+		system("clear")
+		view_account
+	end
+end
+
+def overdraft_check(amount)
+	insufficient = true
+	if @current_acct.balance < amount
+		puts "Insufficient funds."
+		print "Try again? [y/n] "
+		choice = gets.chomp.downcase
+		if choice == 'y'
+			withdrawal
+		else
+			session_menu
+		end
+	else
+		insufficient = false
+	end
+	return insufficient
 end
 
 main
