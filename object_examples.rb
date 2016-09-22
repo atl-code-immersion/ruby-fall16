@@ -29,6 +29,9 @@ end
 
 my_profile = Person.new("Aaron", 34)
 
+# what would it look like if you just printed out an Object?
+# puts my_profile
+
 puts "Hello, #{my_profile.name}. You are #{my_profile.age}-years-old."
 
 my_pet = Pet.new("Rover","Brown","Dog",12,"A390A02")
