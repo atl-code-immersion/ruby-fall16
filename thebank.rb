@@ -25,10 +25,14 @@ class Account
 
 end
 
+# arrays to collect User and Account objects
 @users = []
 @accounts = []
 
 def main
+	# coming here signals either a brand new
+	# run of the program, or that a user has
+	# signed out (ended their session)
 	@user = ""
 
 	puts "Welcome to Tech Talent Bank!"
@@ -65,7 +69,7 @@ def sign_in
 		end
 	end
 
-	if user_found	
+	if user_found	# if user_found == true
 		
 		attempts = 3
 		while attempts > 0
@@ -207,7 +211,7 @@ end
 def withdrawal
 	print "How much would you like withdraw today: $"
 	amount = gets.chomp.to_f
-	if !overdraft_check(amount)
+	if !overdraft_check(amount) # if overdraft_check(amount) returns false
 		@current_acct.balance -= amount
 		system("clear")
 		view_account
