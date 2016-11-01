@@ -1,5 +1,6 @@
 class Team
 
+	attr_reader :name
 	attr_accessor :name, :ranking
 
 	def initialize(name, ranking)
@@ -84,6 +85,7 @@ def enter_teams
 		@teams.push(Team.new(name, ranking))
 	end
 	@teams.sort! { |a,b| a.ranking <=> b.ranking }
+	#@teams = @teams.sort_by {|team| team.ranking}
 	return_to_menu
 end
 

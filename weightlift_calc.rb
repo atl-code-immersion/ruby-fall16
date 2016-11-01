@@ -45,7 +45,8 @@ p_w = d_w - 45
 # to have an even amount of weight on each side
 # of bar, the plate weight must be divisible by 10
 if p_w%10 != 0
-	puts "That weight is not possible with our current setup\nLet me bump it up 5 lbs to #{d_w + 5}"
+	d_w += 5
+	puts "That weight is not possible with our current setup\nLet me bump it up 5 lbs to #{d_w}"
 	p_w += 5
 end
 
