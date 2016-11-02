@@ -17,22 +17,18 @@ def build_deck
 	return deck
 end
 
-def create_hands(deck)
-	hands = [[],[]]
-
+def create_hand(deck)
+	arr = []
 	5.times do
-		card = deck.delete(deck.sample)
-		hands[0].push(card)
-		card = deck.delete(deck.sample)
-		hands[1].push(card)
+		card = deck.sample
+		arr.push(card)
+		deck.delete(card)
 	end
-
-	return hands
+	return arr
 end
 
 def royal_flush
 end
-
 
 def straight_flush
 end
@@ -61,11 +57,11 @@ end
 def duplicate_search(hand)
 	
 	numbers = hand.map {|row| row[0]}
-	counts = Hash.new
+	counts = Hash.new 0
 
 
 	if numbers.uniq.length == numbers.length
-		return []
+		return {}
 	else
 
 		numbers.sort.each do |item| 
@@ -75,3 +71,4 @@ def duplicate_search(hand)
 		counts = counts.sort_by {|key, value| value}.to_h
 	end
 end
+
