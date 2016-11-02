@@ -1,11 +1,13 @@
 class Vehicle
 
 	attr_reader :year, :make, :model
+	attr_accessor :customer
 
-	def initialize(year, make, model)
+	def initialize(year, make, model, customer)
 		@year = year
 		@make = make
 		@model = model
+		@customer = customer
 	end
 
 end
@@ -40,10 +42,12 @@ end
 def main_menu
 	puts "Choose From the Following:"
 	puts "--------------------------"
-	puts "1. Enter New Vehicles"
-	puts "2. List All Vehicles"
-	puts "3. Enter New Customers"
-	puts "4. List All Customers"
+	puts "1. Enter New Vehicles\n"
+	puts "2. List All Vehicles\n"
+	puts "3. Enter New Customers\n"
+	puts "4. List All Customers\n"
+	puts "5. List Available Vehicles" #only show vehicles where customer attribute == nil
+	puts "6. Return a Vehicle" #look up vehicle and set customer to nil
 	puts "0. End Program"
 
 	choice = gets.chomp.to_i
@@ -86,7 +90,7 @@ def enter_vehicles
 		print "Vehicle Year: "
 		year = gets.chomp
 
-		@vehicles.push(Vehicle.new(year, make, model))
+		@vehicles.push(Vehicle.new(year, make, model, nil))
 		File.open("vehicles.txt", "w"){|f| f.write(Marshal.dump(@vehicles))}
 		clear_screen
 	end
@@ -96,11 +100,47 @@ end
 def list_vehicles
 	@vehicles.each_with_index do |vehicle, index|
 		puts "#{index+1}. #{vehicle.make} #{vehicle.model} (#{vehicle.year})"
+		print "Currently rented to: "
+		if vehicle.customer == nil
+			puts "no one"
+		else
+			puts "#{vehicle.customer.first_name} #{vehicle.customer.last_name}"
+		end
 	end
+
+	puts "**********"
+	print "Which vehicle will you be renting out: "
+	choice = gets.chomp.to_i
+	puts "**********"
+
+	vehicle_assign(choice-1)
+	#main_menu
+end
+
+def vehicle_assign(index)
+	puts "Provide Customer info for look-up..."
+	print "First Name: "
+	first_name = gets.chomp
+	print "Last Name: "
+	last_name = gets.chomp
+
+	current_customer = ""
+	@customers.each do |customer|
+		if customer.first_name == first_name && customer.last_name == last_name
+			current_customer = customer
+		end
+	end
+
+	@vehicles[index].customer = current_customer
+	File.open("vehicles.txt", "w"){|f| f.write(Marshal.dump(@vehicles))}
+
+	puts "Success!"
+	puts "#{@vehicles[index].make} #{@vehicles[index].model} is now rented to #{@vehicles[index].customer.first_name} #{@vehicles[index].customer.last_name}"
+	sleep(10)
 	main_menu
 end
 
-def enter_customer
+def enter_customers
 	puts "Enter new Customers. Type 'done' for the First Name when completed."
 
 	first_name = ""
@@ -117,7 +157,6 @@ def enter_customer
 		print "City: "
 		city = gets.chomp
 
-
 		@customers.push(Customer.new(first_name, last_name, age, city))
 		File.open("customers.txt", "w"){|f| f.write(Marshal.dump(@customers))}
 		clear_screen
@@ -125,14 +164,12 @@ def enter_customer
 	main_menu
 end
 
-def list_vehicles
-	@vehicles.each_with_index do |vehicle, index|
-		puts "#{index+1}. #{vehicle.make} #{vehicle.model} (#{vehicle.year})"
+def list_customers
+	@customers.each_with_index do |customer, index|
+		puts "#{index+1}. #{customer.first_name} #{customer.last_name} (#{customer.age}), #{customer.city}"
 	end
 	main_menu
 end
-
-
 
 def clear_screen
 	Gem.win_platform? ? (system "cls") : (system "clear")
