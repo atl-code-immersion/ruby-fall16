@@ -44,10 +44,11 @@ def main_menu
 	puts "--------------------------"
 	puts "1. Enter New Vehicles\n"
 	puts "2. List All Vehicles\n"
-	puts "3. Enter New Customers\n"
-	puts "4. List All Customers\n"
-	puts "5. List Available Vehicles" #only show vehicles where customer attribute == nil
-	puts "6. Return a Vehicle" #look up vehicle and set customer to nil
+	puts "3. List Available Vehicles" #only show vehicles where customer attribute == nil
+	puts "4. Return a Vehicle" #look up vehicle and set customer to nil
+
+	puts "5. Enter New Customers\n"
+	puts "6. List All Customers\n"
 	puts "0. End Program"
 
 	choice = gets.chomp.to_i
@@ -61,8 +62,14 @@ def main_menu
 			list_vehicles
 		when 3
 			clear_screen
-			enter_customers
+			#avail_vehicles
 		when 4
+			clear_screen
+			#return_vehicle
+		when 5
+			clear_screen
+			enter_customers
+		when 6
 			clear_screen
 			list_customers
 		when 0
